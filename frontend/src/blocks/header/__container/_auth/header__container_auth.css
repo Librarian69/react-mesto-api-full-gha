@@ -1,0 +1,7 @@
+@media screen and (max-width: 896px) {
+  .header__container_auth {
+    display: none;
+    margin-top: 14px;
+    margin-right: 30px;
+  }
+}

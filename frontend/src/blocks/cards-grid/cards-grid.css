@@ -1,0 +1,17 @@
+.cards-grid {
+  max-width: 880px;
+  margin: 0 auto 67px;
+}
+
+@media screen and (min-width: 598px) and (max-width: 896px) {
+  .cards-grid {
+    max-width: 581px;
+  }
+}
+
+@media screen and (max-width: 597px) {
+  .cards-grid {
+    max-width: 564px;
+    margin: 0 auto 50px;
+  }
+}

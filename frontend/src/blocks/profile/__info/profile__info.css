@@ -1,0 +1,30 @@
+.profile__info {
+  display: grid;
+  align-self: center;
+  grid-area: profile__info;
+  grid-template-columns: 150px 300px 36px;
+  grid-template-areas:
+  "profile__button-edit-avatar profile__name profile__button-edit"
+  "profile__button-edit-avatar profile__description .";
+}
+
+@media screen and (max-width: 896px) {
+  .profile__info {
+    display: grid;
+    justify-items: center;
+    grid-template-columns: 225px 19px;
+    grid-template-areas:
+      "profile__button-edit-avatar profile__button-edit-avatar"
+      "profile__name profile__button-edit"
+      "profile__description profile__button-edit";
+    margin-bottom: 33px;
+    gap: 0;
+  }
+}
+
+
+@media screen and (min-width: 466px) and (max-width: 896px) {
+  .profile__info {
+    grid-template-columns: 294px 42px;
+  }
+}

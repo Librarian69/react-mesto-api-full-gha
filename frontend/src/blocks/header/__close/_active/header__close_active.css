@@ -1,0 +1,18 @@
+.header__close_active {
+    display: none;  
+  }  
+  
+@media screen and (max-width: 465px) {
+  .header__close_active {
+    display: block !important;
+  }
+}
+
+@media screen and (min-width: 466px) and (max-width: 896px) {
+  .header__close_active {
+    display: block !important;
+    min-width: 24px;
+    min-height: 24px;
+    bottom: 26px;
+  }
+}

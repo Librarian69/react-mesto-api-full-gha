@@ -1,0 +1,16 @@
+.profile__card {
+  display: flex;
+  column-gap: 30px, 24px, 244px;
+}
+
+@media screen and (max-width: 896px) {
+  .profile__card {
+    display: grid;
+    justify-items: center;
+    grid-template-areas: 
+    "profile__avatar profile__avatar profile__avatar profile__avatar profile__avatar"
+    ". profile__info  profile__info profile__button-edit ."
+    "profile__button-add profile__button-add profile__button-add profile__button-add profile__button-add";
+    margin: 0;
+  }
+}

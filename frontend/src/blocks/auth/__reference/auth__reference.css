@@ -1,0 +1,8 @@
+/* .auth__reference {
+
+} */
+
+.auth__reference:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}

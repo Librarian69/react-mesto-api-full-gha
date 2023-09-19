@@ -1,0 +1,17 @@
+.card__photo {
+  display: block;
+  width: 282px;
+  border-radius: 5% 5% 0% 0%;
+  object-fit: cover;
+  aspect-ratio: 1;
+}
+
+.card__photo:hover {
+  cursor: pointer;
+}
+
+@media screen and (max-width: 597px) {
+  .card__photo {
+    min-width: 100%;
+  }
+}
