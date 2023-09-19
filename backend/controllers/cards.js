@@ -22,11 +22,8 @@ module.exports.createCard = (req, res, next) => {
 };
 
 module.exports.getCards = (req, res, next) => {
-  Card.find({}).populate(['owner', 'likes'])
+  Card.find({})
     .then((card) => {
-      if (!card) {
-        throw new NotFound('карточка не найдена.');
-      }
       return res.send(card);
     })
     .catch(next);
