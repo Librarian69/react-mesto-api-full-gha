@@ -36,38 +36,41 @@ function App() {
   const api = new Api({
     baseUrl: "https://api.mikhail.students.nomoredomainsrocks.ru",
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('token')}`,
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
       "Content-Type": "application/json",
     },
   });
 
   useEffect(() => {
-    if(isAuth) {
+    if (isAuth) {
       Promise.all([api.getUserInfo(), api.getAllCards()])
-      .then(([user, cards]) => {
-        setCurrentUser(user);
-        setCards(cards);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    }   
+        .then(([user, cards]) => {
+          setCurrentUser(user);
+          setCards(cards);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   }, [isAuth]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if(token) {
-      auth.checkToken(token).then((res) => {
-        setCurrentUser(res)
-        setIsAuth(true)
-        setEmail(res.data.email)
-        navigate("/")
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    const email = localStorage.getItem("email");
+    if (token) {
+      api
+        .getUserInfo()
+        .then((res) => {
+          setCurrentUser(res);
+          setIsAuth(true);
+          setEmail(email);
+          navigate("/");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
-  }, [])
+  }, []);
 
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
@@ -90,10 +93,9 @@ function App() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setSelectedCard(null);
-    setIsInfoTooltipOpen(false)
+    setIsInfoTooltipOpen(false);
     // setGroup(false)
   };
-  
 
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i === currentUser._id);
@@ -155,78 +157,90 @@ function App() {
   }
 
   function handleLogin(obj) {
-    if(!obj.email || !obj.password) {
-      return
+    if (!obj.email || !obj.password) {
+      return;
     }
 
-    auth.login(obj).then((data) => {
-      if(data.token) {
-        setIsAuth(true);
-        localStorage.setItem("token", data.token);
-        setEmail(obj.email);
-        navigate("/");
+    auth
+      .login(obj)
+      .then((data) => {
+        if (data.token) {
+          setIsAuth(true);
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("email", obj.email);
+          setEmail(obj.email);
+          navigate("/");
         }
       })
       .catch((err) => {
-        setErr(true)
-        setIsInfoTooltipOpen((prev) => !prev)
+        setErr(true);
+        setIsInfoTooltipOpen((prev) => !prev);
       });
   }
 
   function handleRegister(obj) {
-    if(!obj.email || !obj.password) {
-      return
+    if (!obj.email || !obj.password) {
+      return;
     }
 
-    auth.register(obj).then((data) => {
-      setErr(false)
-      setIsInfoTooltipOpen((prev) => !prev)
-      navigate("/sign-in");
-
+    auth
+      .register(obj)
+      .then((data) => {
+        setErr(false);
+        setIsInfoTooltipOpen((prev) => !prev);
+        navigate("/sign-in");
       })
       .catch((err) => {
-        setErr(true)
-        setIsInfoTooltipOpen((prev) => !prev)
+        setErr(true);
+        setIsInfoTooltipOpen((prev) => !prev);
       });
-  }  
+  }
 
   function handleExit() {
-    setEmail("")
-    localStorage.removeItem("token")
-
+    setEmail("");
+    localStorage.removeItem("token");
   }
-  
 
   return (
     <CurrentUserContext.Provider value={{ currentUser }}>
-      <Header email={email} onExit={handleExit}  />
-      <Routes>      
-      <Route path="/" element={
-        <ProtectedRoute isAuth={isAuth}>
-        <Main
-        onEditProfile={handleEditProfileClick}
-        onAddPlace={handleAddPlaceClick}
-        onEditAvatar={handleEditAvatarClick}
-        onCardClick={handleCardClick}
-        onCardLike={handleCardLike}
-        onCardDelete={handleCardDelete}
-        cards={cards}
-      />
-      </ProtectedRoute>
-      } />
-      <Route path="/sign-up" element={<Register onRegister={handleRegister}/>} />
-      <Route path="/sign-in" element={<Login onLogin={handleLogin}/>} />      
+      <Header email={email} onExit={handleExit} />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute isAuth={isAuth}>
+              <Main
+                onEditProfile={handleEditProfileClick}
+                onAddPlace={handleAddPlaceClick}
+                onEditAvatar={handleEditAvatarClick}
+                onCardClick={handleCardClick}
+                onCardLike={handleCardLike}
+                onCardDelete={handleCardDelete}
+                cards={cards}
+              />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/sign-up"
+          element={<Register onRegister={handleRegister} />}
+        />
+        <Route path="/sign-in" element={<Login onLogin={handleLogin} />} />
       </Routes>
 
-      <InfoTooltip 
+      <InfoTooltip
         name="infoTooltip"
         onClose={closeAllPopups}
         isOpen={isInfoTooltipOpen}
         err={err}
-        message={err ? "Что-то пошло не так! Попробуйте ещё раз." : "Вы успешно зарегистрировались!"}
+        message={
+          err
+            ? "Что-то пошло не так! Попробуйте ещё раз."
+            : "Вы успешно зарегистрировались!"
+        }
       />
 
-      <Footer />      
+      <Footer />
 
       <EditProfilePopup
         isOpen={isEditProfilePopupOpen}
